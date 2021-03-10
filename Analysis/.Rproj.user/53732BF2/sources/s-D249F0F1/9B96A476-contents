@@ -1,0 +1,99 @@
+# UMN EPSY 5200: Programming Methods for Psychological Research
+# Jeffrey K. Bye
+
+# Helper script to process a folder of .csv files with JSON
+#     exported from jsPsych studies run on Pavlovia.org
+
+# NOTE: I'm sure this script can be optimized and greatly improved
+#   this is a working draft. Feel free to make your own improvements!
+
+
+# Load pre-written functions ----------------------------------------------
+
+# the source function here will execute the function script
+source("jsPsych_to_R_functions.R")
+# by running that script, our functions get attached to global enviro
+# so they can used below
+# as a general practice, separating helper functions can help reduce clutter
+#   but it's not necessary
+# note the source file also loads required libraries
+
+
+
+# Define relevant variables for demo data ---------------------------------
+
+## Define some character lists used in the jsPsych file
+#   (these are relatively easy to copy and paste and change [] to c())
+scale1 <- c(
+  "Strongly Disagree", 
+  "Disagree", 
+  "Neutral", 
+  "Agree", 
+  "Strongly Agree"
+)
+coffee_options <- c(
+  'sugar', "cream", 'honey', 'nondairy milk', 'dairy milk', 'more coffee'
+)
+food_options <- c("Apples", "Bananas", "Carrots", "Donuts", "Eggplant")
+
+
+# Customization -----------------------------------------------------------
+
+## Customization Notes:
+# In order to figure out how to adapt the specific code below, it may be useful to first
+#   load an example CSV to explore how the data are saved by jsPsych
+
+ex_data <- read.csv("In_Data/epsy5200_jspsych_demo.csv")
+# ex_data <- read_csv(paste0("In_Data/", # look in the In_Data folder
+#                            list.files("In_Data", pattern="*.csv")[1] )) # grab first csv file as demo
+# The above line of code reads in the first file in the In_Data folder. 
+# Now we examine ex_data:
+ex_data
+
+
+# YOU MUST DEFINE THIS PART: 
+# for any multi-select items, we need to tell R the full list of options
+multi_list <- list(
+  Coffee = coffee_options, 
+  # left-hand side: define the name from the Responses col
+  # & on the RHS, use the vector defined above w/ all options
+  Foods = food_options
+)
+# if you don't have any multi_select items, you can just set this to NULL
+# multi_list <- NULL
+
+
+
+# Parse data for all participants -----------------------------------------
+
+
+# ### Process the data for each participant (loop) and organize into a single data.frame (jsp_data)
+# files <- list.files("In_Data", pattern="*.csv")
+# 
+# jsp_data <- NULL # initialize an empty data frame to rbind later
+# for (f in 1:length(files)) { # for each file in In_Data folder
+#   
+#   # read in the raw data file
+#   cur_data <- read_csv(paste0("In_Data/",files[f]))
+#   
+  # parse the data with file number
+  parsed_data <- data.frame(FileNum = 1) %>% # record file number
+    bind_cols( # and bind with parsed data
+      parse_study(ex_data, # parse data for current participant
+                  resp_opt_list = multi_list, # pass in your multi-select lists (defined above)
+                  rt = TRUE, # do you want RT values for each page?
+                  prefix = TRUE) # and do you want the item # as prefix for each column?
+    )
+  
+  # # now let's add the current participant's row of data (wide format)
+  # jsp_data <- jsp_data %>% 
+  #   bind_rows(parsed_data)
+#}
+
+## Finally, let's view our data to check to see if it looks OK
+summary(jsp_data)
+head(jsp_data)
+
+# and let's save it
+jsp_data %>% 
+  write_csv(path = "Mid_Data/jspsych_data_wide.csv")
