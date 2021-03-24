@@ -1,0 +1,4 @@
+"rt","stimulus","response","trial_type","trial_index","time_elapsed","internal_node_id","question_order"
+"653435.1750000496","Welcome to the experiment. Press any key to begin.","h","html-keyboard-response","0","653447","0.0-0.0",""
+"8773.704999999609","","{""Meat"":3,""Dairy"":3,""Fruit"":2,""Vegetables"":3}","survey-likert","1","662228","0.0-1.0","[2,3,1,0]"
+"23292.54499997478","","{""Coffee"":[""more coffee""],""Foods"":[""Apples"",""Bananas"",""Carrots"",""Donuts""]}","survey-multi-select","2","685529","0.0-2.0","[0,1]"
