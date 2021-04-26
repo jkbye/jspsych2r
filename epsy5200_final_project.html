@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Comments within HTML look like this -->
+    <!-- This is the title for the browser -->
+    <title>EPSY 5200 S21 Final Project</title>
+    <script src="jspsych-6.3.0/jspsych.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-html-slider-response.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-survey-multi-choice.js"></script>
+    <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  </head>
+  
+  <body>
+    <!-- The body is where static content would go. Here we don't have anything static. -->
+    <!-- Instead we jump right to the script tag (for JavaScript) -->
+    <script>
+      /* Comments within JavaScript can look like this 
+          if you want them on multiple lines */
+      // or individual lines like this
+
+      /* define welcome message trial */
+      let welcome = {
+        type: "html-keyboard-response",
+        stimulus: "Welcome to the experiment. Press any key to begin."
+      }; // semi-colon tells the browser we're done with this command
+      // browsers usually add semi-colons for you if you leave them out, but best practice is to include
+      //  because occasionally problems will happen if you leave them out
+
+    var trial = {
+      type: 'html-slider-response',
+      stimulus: '<p>COVID-19 Vaccine</p>',
+      labels: ['Very Unlikely (0)', '10', '20', '30', '40', '50', '60', '70', '80', '90', 'Very Likely (100)'],
+      prompt: "<p>On a scale of 0 to 100, how likely are you to get the COVID-19 vaccine if offered?</p>",
+      min: '0',
+      max: '100',
+      step: '5'
+    };
+
+    var page_1_options = [
+      "Democrat", 
+      "Republican", 
+      "Other"
+    ];
+
+    var multi_choice_block = {
+      type: 'survey-multi-choice',
+      questions: [
+        {prompt: "How would you describe your political affiliation?", name: 'Political Affiliation', options: page_1_options, required:true}
+      ],
+    };
+
+      /* define end trial */
+      let end = {
+        type: `html-keyboard-response`,
+       stimulus: `<p>Thank you! You have now finished.</p>
+          <p>A .csv file containing your data should be automatically downloading right now.
+          Check your default downloads location to find it. Once you've found it you can close the experiment.</p>`,
+        on_load: function(){
+          jsPsych.data.get()
+             .localSave('csv', 'epsy5200_jspsych_demo.csv');
+         }
+       };
+
+      /* create timeline */
+      // here we create a list of the trials
+      let timeline = [welcome, trial, multi_choice_block, end];
+
+      /* start the experiment */
+      jsPsych.init({
+        timeline: timeline
+      });
+
+      
+    </script>
+
+    <!-- If you were to add anything after the script end before the body end, it would be read after the script. -->
+  </body>
+
+</html>
