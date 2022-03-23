@@ -1,0 +1,4 @@
+"rt","stimulus","response","trial_type","trial_index","time_elapsed","internal_node_id","question_order"
+"1966","<p>Welcome!</p><p>Please press any key to start.</p>","m","html-keyboard-response","0","1982","0.0-0.0",""
+"6637","","{""Meat"":2,""Vegetables"":2,""Fruit"":3}","survey-likert","1","8623","0.0-1.0","[2,0,1]"
+"9719","","{""Colors"":[""Green""],""Foods"":[""Eggplant""],""Lang"":[""JavaScript""]}","survey-multi-select","2","18346","0.0-2.0","[2,1,0]"

@@ -1,10 +1,14 @@
-# UMN EPSY 5200: Programming Methods for Psychological Research
-# Jeffrey K. Bye
+# UMN EPSY 5123: Programming Workflows for Psychological Research
+# Jeffrey K. Bye, Ph.D.
 
 # HELPER FUNCTIONS to process a folder of .csv files with JSON
 #     exported from jsPsych studies run on Pavlovia.org
 
-## NOTE: these have not all been error-tested yet with jsPsych 6.3
+## NOTE: these have not all been error-tested yet with jsPsych 7.1
+# If you find any issues, or write new functions, please 
+#   submit pull requests on Github!
+# https://github.com/jkbye/jspsych2r
+
 
 #### IMPORTANT
 # This file just defines the functions I've written.
@@ -16,6 +20,7 @@
 
 # NOTE: These functions are a working draft -- if you run into a tricky error,
 #   please let me know and I will work to fix it!
+#   Or submit a GitHub pull request!
 
 
 
