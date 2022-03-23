@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Comments within HTML look like this -->
+    <!-- This is the title for the browser -->
+    <title>EPSY 5123 S22 Week 9 jsPsych</title>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/plugin-survey-likert.js"></script>
+    <script src="jspsych/plugin-external-html.js"></script>
+    <script src="jspsych/plugin-survey-multi-select.js"></script>
+    <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css"></link>
+  </head>
+
+  <body>
+    <!-- The body is where static content would go. Here we don't have anything static. -->
+    <!-- Instead we jump right to the script tag (for JavaScript) -->
+    <script>
+      /* Comments within JavaScript can look like this
+          if you want them on multiple lines */
+      // or individual lines like this
+
+      var jsPsych = initJsPsych({
+        use_webaudio: false,
+        on_finish: function(){
+          jsPsych.data.displayData();
+        }
+      });
+
+      /* define welcome message trial */
+      let welcome = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: "<p>Welcome!</p><p>Please press any key to start.</p>"
+      }; // semi-colon tells the browser we're done with this command
+      // browsers usually add semi-colons for you if you leave them out, but best practice is to include
+      //  because occasionally problems will happen if you leave them out
+
+      var likert_scale = [
+        "Strongly Disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly Agree"
+      ];
+
+      var trial = {
+        type: jsPsychSurveyLikert,
+        questions: [
+          {prompt: "I like vegetables.", name: 'Vegetables', labels: likert_scale},
+          {prompt: "I like fruit.", name: 'Fruit', labels: likert_scale},
+          {prompt: "I like meat.", name: 'Meat', labels: likert_scale},
+        ],
+        randomize_question_order: true,
+        preamble: "<em>Please rate what you like.</em>"
+      };
+
+      var multiSelectPage = {
+        type: jsPsychSurveyMultiSelect,
+        questions: [
+          {
+            prompt: "Which of these colors do you like?",
+            options: ["Red", "Yellow", "Green", "Blue", "Black"],
+            horizontal: true,
+            required: true,
+            name: 'Colors'
+          },
+          {
+            prompt: "Which of these foods do you like?",
+            options: ["Apples", "Bananas", "Carrots", "Donuts", "Eggplant"],
+            horizontal: true,
+            required: true,
+            name: 'Foods'
+          },
+          {
+            prompt: "Which languages do you love?",
+            options: ["R", "JavaScript", "HTML", "CSS", "Python"],
+            horizontal: false,
+            required: true,
+            name: 'Lang'
+          }
+        ],
+        required_message: "Please answer!",
+        randomize_question_order: true,
+        // asdfasdfds
+      };
+
+
+
+      /* define end trial */
+      let end = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `<p>Thank you! You have now finished.</p>
+          <p>A .csv file containing your data should be automatically downloading right now.
+          Check your default downloads location to find it. Once you've found it you can close the experiment.</p>`,
+        on_load: function(){
+          jsPsych.data.get()
+            .localSave('csv', 'epsy5123_jspsych_demo.csv');
+        }
+      };
+
+
+      /* create timeline */
+      // here we create a list of the trials
+      let time_line = [
+        welcome,
+        trial,
+        multiSelectPage,
+        end
+      ];
+
+      /* start the experiment */
+      jsPsych.run(time_line);
+
+
+    </script>
+
+    <!-- If you were to add anything after the script end before the body end, it would be read after the script. -->
+  </body>
+
+</html>
