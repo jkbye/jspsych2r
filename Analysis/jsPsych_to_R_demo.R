@@ -17,9 +17,13 @@ files <- list.files("In_Data", full.names = TRUE)
 
 parse_df <- NULL # initialization
 
+list.files("In_data", full.names = TRUE, pattern = "*.csv")
+
 # for (i in files) {
 #   print(i)
 # }
+
+# use a blank DF + 
 
 for (f in files) {
   cur_data <- read.csv(f)
