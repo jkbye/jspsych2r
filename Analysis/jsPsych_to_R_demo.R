@@ -25,6 +25,7 @@ list.files("In_data", full.names = TRUE, pattern = "*.csv")
 
 # use a blank DF + 
 
+#files will be a vector, and f will take the value of each value in the vector
 for (f in files) {
   cur_data <- read.csv(f)
   cur_parse <- parse_study(cur_data, multi_list, prefix = TRUE, rt = TRUE)
