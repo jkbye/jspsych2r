@@ -352,6 +352,10 @@ parse_study <- function(df_json, resp_opt_list = NULL, rt = F, prefix = F) {
       new_df <- parse_iat(
         df_json, t, prefix # parse as IAT response (assume RT=T, default)
       )
+    } else {
+      # else, if it doesn't match existing type, print diagnostic message & skip
+      message(paste("No parse function written for trial_type", cur_trial_type))
+      next # go to next iteration of the loop (skip remaining code below)
     }
     # bind cols
     out_data <- out_data %>% 
