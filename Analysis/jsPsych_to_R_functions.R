@@ -156,8 +156,8 @@ parse_keyboard <- function(df_json, trial_ind, rt = F, prefix = F) {
     grab_cell(trial_ind, "stimulus")
   key <- df_json %>% 
     grab_cell(trial_ind, "response") #%>% # grab contents of cell
-    #as.raw() %>% # convert ASCII code to raw (hexadecimal)
-    #rawToChar() # then to its equivalent character
+  #as.raw() %>% # convert ASCII code to raw (hexadecimal)
+  #rawToChar() # then to its equivalent character
   key_df <- data.frame(stim, key)
   if (rt) { # if rt also requested
     key_df <- key_df %>%  # add the rt col
@@ -323,9 +323,7 @@ parse_study <- function(df_json, resp_opt_list = NULL, rt = F, prefix = F) {
       pull(trial_type) # get trial type
     
     # now run the appropriate function for this trial type
-    if (cur_trial_type == "pavlovia") {
-      next # if it's pavlovia, nothing to do (no meaningful data)
-    } else if (cur_trial_type == "instructions") {
+    if (cur_trial_type == "instructions") {
       new_df <- parse_instructions(
         df_json, t, prefix # parse as instructions (get RT)
       )
@@ -342,11 +340,11 @@ parse_study <- function(df_json, resp_opt_list = NULL, rt = F, prefix = F) {
         df_json, t, resp_opt_list, rt, prefix # parse as multi-select
       )
     } else if (cur_trial_type == "html-keyboard-response" |
-             cur_trial_type == "image-keyboard-response") {
+               cur_trial_type == "image-keyboard-response") {
       new_df <- parse_keyboard(
         df_json, t, rt, prefix # parse as keyboard response
       )
-    } else if (cur_trial_type == "html-slider-response") {
+    } else if (cur_trial_type == "html-slider-response" | cur_trial_type == "image-slider-response") {
       new_df <- parse_slider(
         df_json, t, rt, prefix # parse as slider response
       )
@@ -355,16 +353,15 @@ parse_study <- function(df_json, resp_opt_list = NULL, rt = F, prefix = F) {
         df_json, t, prefix # parse as IAT response (assume RT=T, default)
       )
     } else {
-      # else, if it doesn't match existing type, print diagnostic message & skip
-      message(paste("No parse function written for trial_type", cur_trial_type))
-      next # go to next iteration of the loop (skip remaining code below)
+      next
     }
+    
     # bind cols
     out_data <- out_data %>% 
       bind_cols(new_df)
   }
   
- return(out_data) 
+  return(out_data) 
 }
 
 
