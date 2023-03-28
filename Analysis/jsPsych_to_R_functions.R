@@ -143,7 +143,27 @@ parse_likert <- function(df_json, trial_ind, rt = F, prefix = F) {
 }
 ## LATER: ADD RECODE OPTION
 
-
+## parse_text: grab survey-text JSON for the row with trial_ind, parse it
+#   Inputs: df_json (a data.frame imported from a single .csv file from jsPsych & Pavlovia)
+#           trial_ind (the integer in the trial_index column) to index the correct row of df_json
+#           rt (optional, default false) whether to also return RT
+#           prefix (optional, default false) whether to add trial # as prefix
+#   Output: df row with text response (rt optional)
+parse_text <- function(df_json, trial_ind, rt = F, prefix = F) { 
+  text_df <- df_json %>% 
+    parse_json(trial_ind, "response") %>% # pass to parse_json function
+    enframe() %>% # force named vector to df (will be long)
+    pivot_wider(names_from = name, values_from = value) # now make wide
+  if (rt) { # if rt also requested
+    text_df <- text_df %>%  # add the rt col
+      bind_cols(tibble(rt = get_rt(df_json, trial_ind)))
+  }
+  if (prefix) { # if prefix to be added
+    text_df <- text_df %>%  # add trial prefix i#
+      rename_all(function(x) paste0("i", trial_ind, "_", x))
+  }
+  return(text_df) # return parsed as df (columns)
+}
 
 ## parse_keyboard: grab keypress info for the row with trial_ind, parse it
 #   Inputs: df_json (a data.frame imported from a single .csv file from jsPsych & Pavlovia)
@@ -341,12 +361,15 @@ parse_study <- function(df_json, resp_opt_list = NULL, rt = F, prefix = F) {
       new_df <- parse_multi_select(
         df_json, t, resp_opt_list, rt, prefix # parse as multi-select
       )
-    } else if (cur_trial_type == "html-keyboard-response" |
-             cur_trial_type == "image-keyboard-response") {
+    } else if (cur_trial_type == "survey-text") {
+      new_df <- parse_text(
+        df_json, t, rt, prefix # parse as survey-text
+      )
+    } else if (cur_trial_type %>% str_ends("keyboard-response")) {
       new_df <- parse_keyboard(
         df_json, t, rt, prefix # parse as keyboard response
       )
-    } else if (cur_trial_type == "html-slider-response") {
+    } else if (cur_trial_type %>% str_ends("slider-response")) {
       new_df <- parse_slider(
         df_json, t, rt, prefix # parse as slider response
       )
