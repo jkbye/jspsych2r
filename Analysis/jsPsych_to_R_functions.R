@@ -371,6 +371,7 @@ parse_study <- function(df_json, resp_opt_list = NULL, rt = F, prefix = F) {
 
 # List of future changes to make ------------------------------------------
 
+# split parse_study into wide and long versions
 # eliminate some redundancy in functions
 # only pass 1 row to parse_ functions?
 # add more functions for new item types
